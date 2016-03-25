@@ -4,16 +4,13 @@ import urllib
 
 PORT = 8000
 
-class Proxy(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    def do_GET(self):
-        self.path = self.path[1:]
-        print self.path
-        print self.wfile
-        if self.path.lower().find("wfs"):
-            self.copyfile(urllib.urlopen(self.path), self.wfile)
-        else:
-            super(Proxy, self).do_GET()
+class Foo(SimpleHTTPServer.SimpleHTTPRequestHandler):
+#    def __init__(self,*args):
+#        SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(args)
 
-httpd = SocketServer.TCPServer(('', PORT), Proxy)
+    def do_GET(self):
+        SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
+
+httpd = SocketServer.TCPServer(('', PORT), Foo)
 print "serving at port", PORT
 httpd.serve_forever()
